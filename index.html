@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L6th Physics Comprehensive Mock Diagnostics</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .input-error { border-color: #ef4444; background-color: #fef2f2; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900 min-h-screen">
+
+    <!-- Header Banner -->
+    <header class="bg-gradient-to-r from-slate-900 to-blue-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight">L6th Physics Assessment Tracker</h1>
+                <p class="text-blue-200 mt-1">Dual-Teacher Summer Exam Performance Diagnostics Hub</p>
+            </div>
+            <div class="mt-4 md:mt-0 bg-blue-950 bg-opacity-60 px-4 py-2 rounded-lg border border-blue-800 text-sm">
+                Total Exam Marks: <span class="font-bold text-emerald-400">160</span> (80 Marks Per Teacher)
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        
+        <!-- Metadata Entry Area -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Student Full Name</label>
+                    <input type="text" id="studentName" placeholder="Enter name" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 font-medium">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Teacher 1 (Mechanics/Circuits)</label>
+                    <select id="teacher1Select" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 focus:ring-blue-500 focus:border-blue-500 font-medium">
+                        <option value="">-- Select Teacher 1 --</option>
+                        <option value="MLA">MLA</option>
+                        <option value="DJM">DJM</option>
+                        <option value="MCGW">MCGW</option>
+                        <option value="DJ">DJ</option>
+                        <option value="CEH">CEH</option>
+                        <option value="JPGB">JPGB</option>
+                        <option value="KJM">KJM</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Teacher 2 (Waves/Quantum/Space)</label>
+                    <select id="teacher2Select" class="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 focus:ring-blue-500 focus:border-blue-500 font-medium">
+                        <option value="">-- Select Teacher 2 --</option>
+                        <option value="MLA">MLA</option>
+                        <option value="DJM">DJM</option>
+                        <option value="MCGW">MCGW</option>
+                        <option value="DJ">DJ</option>
+                        <option value="CEH">CEH</option>
+                        <option value="JPGB">JPGB</option>
+                        <option value="KJM">KJM</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metric KPI Cards Panel -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col justify-between">
+                <span class="text-xs font-bold text-blue-800 uppercase tracking-wider">Teacher 1 Score Component</span>
+                <div class="mt-2 flex items-baseline gap-1">
+                    <span id="t1ScoreDisplay" class="text-4xl font-black text-slate-800">0</span>
+                    <span class="text-gray-400 font-bold text-lg">/ 80</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-3">
+                    <div id="t1ProgressBar" class="bg-blue-600 h-1.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col justify-between">
+                <span class="text-xs font-bold text-indigo-800 uppercase tracking-wider">Teacher 2 Score Component</span>
+                <div class="mt-2 flex items-baseline gap-1">
+                    <span id="t2ScoreDisplay" class="text-4xl font-black text-slate-800">0</span>
+                    <span class="text-gray-400 font-bold text-lg">/ 80</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-3">
+                    <div id="t2ProgressBar" class="bg-indigo-600 h-1.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-900 rounded-xl p-5 shadow-sm text-white flex flex-col justify-between">
+                <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Combined Total Evaluation</span>
+                <div class="mt-2 flex items-baseline justify-between">
+                    <div>
+                        <span id="combinedScoreDisplay" class="text-4xl font-black text-emerald-400">0</span>
+                        <span class="text-slate-400 font-bold text-lg">/ 160</span>
+                    </div>
+                    <span id="combinedPercentageDisplay" class="text-2xl font-bold text-slate-200">0%</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-2">Aggregate performance metric tracking macro specifications.</p>
+            </div>
+        </div>
+
+        <!-- Split Grid: Inputs Left, Live Charts Right -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Data Entry Grid (7 Columns) -->
+            <div class="lg:col-span-7 space-y-8">
+                
+                <!-- Teacher 1 Table Block -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="bg-blue-900 text-white px-5 py-3 flex justify-between items-center">
+                        <h2 class="font-bold tracking-wide">Teacher 1 Section: Mechanics & Electricity</h2>
+                        <span class="text-xs bg-blue-800 px-2 py-1 rounded border border-blue-700 font-mono">Max 80</span>
+                    </div>
+                    <div class="overflow-x-auto max-h-[400px] overflow-y-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-100 text-[11px] font-bold text-gray-600 uppercase tracking-wider sticky top-0 z-10 bg-gray-100 shadow-sm">
+                                <tr>
+                                    <th class="px-4 py-2.5 border-b w-14">Q#</th>
+                                    <th class="px-4 py-2.5 border-b">Sub-Topic Area</th>
+                                    <th class="px-4 py-2.5 border-b w-24">Skill Style</th>
+                                    <th class="px-4 py-2.5 border-b text-center w-28">Score Entry</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teacher1Grid" class="divide-y divide-gray-200 text-sm">
+                                <!-- JS Populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Teacher 2 Table Block -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="bg-indigo-900 text-white px-5 py-3 flex justify-between items-center">
+                        <h2 class="font-bold tracking-wide">Teacher 2 Section: Waves, Quantum & Space</h2>
+                        <span class="text-xs bg-indigo-800 px-2 py-1 rounded border border-indigo-700 font-mono">Max 80</span>
+                    </div>
+                    <div class="overflow-x-auto max-h-[400px] overflow-y-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-100 text-[11px] font-bold text-gray-600 uppercase tracking-wider sticky top-0 z-10 bg-gray-100 shadow-sm">
+                                <tr>
+                                    <th class="px-4 py-2.5 border-b w-14">Q#</th>
+                                    <th class="px-4 py-2.5 border-b">Sub-Topic Area</th>
+                                    <th class="px-4 py-2.5 border-b w-24">Skill Style</th>
+                                    <th class="px-4 py-2.5 border-b text-center w-28">Score Entry</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teacher2Grid" class="divide-y divide-gray-200 text-sm">
+                                <!-- JS Populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Interactive Graphic Visualization Dashboard (5 Columns) -->
+            <div class="lg:col-span-5 space-y-6 sticky top-6">
+                <!-- Granular Subtopic Chart Display Frame -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                    <h3 class="font-bold text-gray-800 text-sm border-b pb-2 mb-3 tracking-tight uppercase text-gray-500">Live Granular Sub-Topic Mastery (%)</h3>
+                    <div class="relative h-[420px]">
+                        <canvas id="topicChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Skill Vector Radar Display Frame -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                    <h3 class="font-bold text-gray-800 text-sm border-b pb-2 mb-3 tracking-tight uppercase text-gray-500">Cognitive Skill Execution (%)</h3>
+                    <div class="relative h-64">
+                        <canvas id="skillChart"></canvas>
+                    </div>
+                </div>
+                
+                <button id="resetMasteryBtn" class="w-full text-xs font-semibold text-red-600 border border-red-200 bg-red-50 hover:bg-red-100 rounded-lg py-2 transition text-center">
+                    Clear Data Fields
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // High-resolution syllabus mapping matching Teacher 1 and Teacher 2 structures
+        const dynamicDataset = {
+            t1: [
+                { id: "1", max: 1, topic: "Circuits: Charge, Current & Power", type: "Multi choice" },
+                { id: "2", max: 1, topic: "Circuits: Charge, Current & Power", type: "Multi choice" },
+                { id: "3", max: 1, topic: "Circuits: Series & Parallel Networks", type: "Multi choice" },
+                { id: "4", max: 1, topic: "Circuits: Potential Dividers & LDRs", type: "Multi choice" },
+                { id: "5", max: 1, topic: "Mechanics: Motion Graphs & SUVAT", type: "Multi choice" },
+                { id: "6", max: 1, topic: "Mechanics: Vectors & Projectiles", type: "Multi choice" },
+                { id: "7", max: 1, topic: "Mechanics: Newton's Laws & Momentum", type: "Multi choice" },
+                { id: "8", max: 1, topic: "Mechanics: Work, Energy & Efficiency", type: "Multi choice" },
+                { id: "9", max: 2, topic: "Circuits: Resistivity & Microscopic Flow", type: "Calculate" },
+                { id: "10a", max: 6, topic: "Circuits: Component I-V Characteristics", type: "Explain" },
+                { id: "10b", max: 5, topic: "Circuits: Temperature & Illumination Models", type: "Deduce" },
+                { id: "11ai", max: 2, topic: "Physicist: SI Units & Estimation", type: "Show that" },
+                { id: "11aii", max: 3, topic: "Circuits: EMF & Internal Resistance", type: "Determine" },
+                { id: "11aiiii", max: 2, topic: "Circuits: Potential Dividers & LDRs", type: "Determine" },
+                { id: "11b", max: 2, topic: "Circuits: EMF & Internal Resistance", type: "Explain" },
+                { id: "12a", max: 5, topic: "Mechanics: Work, Energy & Efficiency", type: "Show that" },
+                { id: "12b", max: 2, topic: "Mechanics: Work, Energy & Efficiency", type: "Calculate" },
+                { id: "13a", max: 2, topic: "Mechanics: Moments & Equilibrium", type: "Explain" },
+                { id: "13bi", max: 2, topic: "Mechanics: Moments & Equilibrium", type: "Show that" },
+                { id: "13bii", max: 5, topic: "Mechanics: Moments & Equilibrium", type: "Determine" },
+                { id: "14", max: 5, topic: "Physicist: Practical Skills & Errors", type: "Sketch/Draw" },
+                { id: "15a", max: 2, topic: "Mechanics: Vectors & Projectiles", type: "Give/State/Name" },
+                { id: "15b", max: 6, topic: "Mechanics: Vectors & Projectiles", type: "Deduce" },
+                { id: "16ai", max: 3, topic: "Mechanics: Motion Graphs & SUVAT", type: "Show that" },
+                { id: "16aii", max: 2, topic: "Mechanics: Motion Graphs & SUVAT", type: "Explain" },
+                { id: "16bi", max: 4, topic: "Mechanics: Newton's Laws & Momentum", type: "Deduce" },
+                { id: "16bii", max: 2, topic: "Mechanics: Newton's Laws & Momentum", type: "Explain" },
+                { id: "17a", max: 4, topic: "Mechanics: Newton's Laws & Momentum", type: "Calculate" },
+                { id: "17b", max: 4, topic: "Mechanics: Newton's Laws & Momentum", type: "Explain" }
+            ],
+            t2: [
+                { id: "1", max: 1, topic: "Waves: Wave Equation & Graphs", type: "Multi choice" },
+                { id: "2", max: 1, topic: "Waves: Superposition & Standing Waves", type: "Multi choice" },
+                { id: "3", max: 1, topic: "Waves: Refraction & Polarization", type: "Multi choice" },
+                { id: "4", max: 1, topic: "Waves: Quantum Nature of Light", type: "Multi choice" },
+                { id: "5", max: 1, topic: "Space: Intensity & Parallax", type: "Multi choice" },
+                { id: "6", max: 1, topic: "Space: HR Diagrams & Stellar Evolution", type: "Multi choice" },
+                { id: "7", max: 1, topic: "Space: Doppler & Cosmological Redshift", type: "Multi choice" },
+                { id: "8", max: 1, topic: "Thermodynamics: Black Body Radiation", type: "Multi choice" },
+                { id: "9", max: 1, topic: "Space: Doppler & Cosmological Redshift", type: "Multi choice" },
+                { id: "10", max: 1, topic: "Waves: Lenses & Magnification", type: "Multi choice" },
+                { id: "11", max: 3, topic: "Waves: Superposition & Standing Waves", type: "Deduce" },
+                { id: "12ai", max: 2, topic: "Waves: Wave Equation & Graphs", type: "Determine" },
+                { id: "12aii", max: 4, topic: "Waves: Superposition & Standing Waves", type: "Deduce" },
+                { id: "12b", max: 2, topic: "Waves: Superposition & Standing Waves", type: "Explain" },
+                { id: "13a", max: 3, topic: "Waves: Lenses & Magnification", type: "Explain" },
+                { id: "13b", max: 3, topic: "Waves: Lenses & Magnification", type: "Determine" },
+                { id: "13c", max: 2, topic: "Waves: Lenses & Magnification", type: "Explain" },
+                { id: "14ai", max: 1, topic: "Physicist: Practical Skills & Errors", type: "Give/State/Name" },
+                { id: "14bi", max: 4, topic: "Waves: Refraction & Polarization", type: "Calculate" },
+                { id: "14bii", max: 3, topic: "Waves: Refraction & Polarization", type: "Explain" },
+                { id: "15a", max: 3, topic: "Thermodynamics: Black Body Radiation", type: "Explain" },
+                { id: "15b", max: 5, topic: "Thermodynamics: Black Body Radiation", type: "Determine" },
+                { id: "16a", max: 1, topic: "Space: HR Diagrams & Stellar Evolution", type: "Give/State/Name" },
+                { id: "16bi", max: 4, topic: "Space: Intensity & Parallax", type: "Show that" },
+                { id: "16bii", max: 2, topic: "Space: Intensity & Parallax", type: "Determine" },
+                { id: "17a", max: 2, topic: "Waves: Quantum Nature of Light", type: "Show that" },
+                { id: "17b", max: 3, topic: "Waves: Quantum Nature of Light", type: "Calculate" },
+                { id: "18a", max: 6, topic: "Waves: Quantum Nature of Light", type: "Deduce" },
+                { id: "18b", max: 4, topic: "Waves: Quantum Nature of Light", type: "Explain" },
+                { id: "18c", max: 4, topic: "Waves: Quantum Nature of Light", type: "Calculate" },
+                { id: "18d", max: 5, topic: "Waves: Quantum Nature of Light", type: "Explain" }
+            ]
+        };
+
+        let topicChartInstance = null;
+        let skillChartInstance = null;
+
+        const teacher1Grid = document.getElementById("teacher1Grid");
+        const teacher2Grid = document.getElementById("teacher2Grid");
+        
+        const t1ScoreDisplay = document.getElementById("t1ScoreDisplay");
+        const t2ScoreDisplay = document.getElementById("t2ScoreDisplay");
+        const combinedScoreDisplay = document.getElementById("combinedScoreDisplay");
+        const combinedPercentageDisplay = document.getElementById("combinedPercentageDisplay");
+        
+        const t1ProgressBar = document.getElementById("t1ProgressBar");
+        const t2ProgressBar = document.getElementById("t2ProgressBar");
+        const resetMasteryBtn = document.getElementById("resetMasteryBtn");
+
+        window.addEventListener("DOMContentLoaded", () => {
+            renderTableGrid(dynamicDataset.t1, teacher1Grid, "t1");
+            renderTableGrid(dynamicDataset.t2, teacher2Grid, "t2");
+            initializeVisualAnalytics();
+
+            resetMasteryBtn.addEventListener("click", () => {
+                document.querySelectorAll(".score-input").forEach(el => el.value = "");
+                runDynamicRecalculation();
+            });
+        });
+
+        function renderTableGrid(dataset, targetTbody, prefix) {
+            targetTbody.innerHTML = "";
+            dataset.forEach(q => {
+                const row = document.createElement("tr");
+                row.className = "hover:bg-slate-50 transition-colors text-xs";
+                row.innerHTML = `
+                    <td class="px-4 py-2 font-bold text-gray-700">${q.id}</td>
+                    <td class="px-4 py-2 text-gray-600 font-medium">${q.topic}</td>
+                    <td class="px-4 py-2"><span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded font-mono text-[10px] border">${q.type}</span></td>
+                    <td class="px-4 py-2">
+                        <div class="flex items-center justify-center gap-1.5">
+                            <input type="number" step="1" min="0" max="${q.max}" data-dataset="${prefix}" data-qid="${q.id}"
+                                   class="score-input w-14 text-center bg-white border border-gray-300 rounded p-0.5 font-bold text-slate-900 focus:ring-1 focus:ring-blue-500 focus:outline-none" 
+                                   placeholder="0" />
+                            <span class="text-gray-400 font-medium text-[11px]">/ ${q.max}</span>
+                        </div>
+                    </td>
+                `;
+                targetTbody.appendChild(row);
+            });
+
+            targetTbody.querySelectorAll(".score-input").forEach(inp => {
+                inp.addEventListener("input", validateAndTrigger);
+            });
+        }
+
+        function validateAndTrigger(e) {
+            const input = e.target;
+            const val = parseFloat(input.value);
+            const prefix = input.getAttribute("data-dataset");
+            const qid = input.getAttribute("data-qid");
+            const meta = dynamicDataset[prefix].find(x => x.id === qid);
+
+            if (val > meta.max || val < 0) {
+                input.classList.add("input-error");
+            } else {
+                input.classList.remove("input-error");
+            }
+            runDynamicRecalculation();
+        }
+
+        function runDynamicRecalculation() {
+            let t1Total = 0;
+            let t2Total = 0;
+
+            const structuredTopicMap = {};
+            const structuredSkillMap = {};
+
+            // Process Teacher 1 Entries
+            dynamicDataset.t1.forEach(q => {
+                const inputElement = document.querySelector(`.score-input[data-dataset="t1"][data-qid="${q.id}"]`);
+                let parsedVal = parseFloat(inputElement ? inputElement.value : 0);
+                if (isNaN(parsedVal) || parsedVal < 0) parsedVal = 0;
+                if (parsedVal > q.max) parsedVal = q.max;
+
+                t1Total += parsedVal;
+                collateMetrics(q.topic, q.type, parsedVal, q.max, structuredTopicMap, structuredSkillMap);
+            });
+
+            // Process Teacher 2 Entries
+            dynamicDataset.t2.forEach(q => {
+                const inputElement = document.querySelector(`.score-input[data-dataset="t2"][data-qid="${q.id}"]`);
+                let parsedVal = parseFloat(inputElement ? inputElement.value : 0);
+                if (isNaN(parsedVal) || parsedVal < 0) parsedVal = 0;
+                if (parsedVal > q.max) parsedVal = q.max;
+
+                t2Total += parsedVal;
+                collateMetrics(q.topic, q.type, parsedVal, q.max, structuredTopicMap, structuredSkillMap);
+            });
+
+            // Update Independent Component Counters
+            t1ScoreDisplay.textContent = Math.round(t1Total * 10) / 10;
+            t2ScoreDisplay.textContent = Math.round(t2Total * 10) / 10;
+            
+            t1ProgressBar.style.width = `${(t1Total / 80) * 100}%`;
+            t2ProgressBar.style.width = `${(t2Total / 80) * 100}%`;
+
+            // Combined System Displays
+            const totalAggregated = t1Total + t2Total;
+            const relativePercent = Math.round((totalAggregated / 160) * 100);
+            
+            combinedScoreDisplay.textContent = Math.round(totalAggregated * 10) / 10;
+            combinedPercentageDisplay.textContent = `${relativePercent}%`;
+
+            updateGraphDisplays(structuredTopicMap, structuredSkillMap);
+        }
+
+        function collateMetrics(topicName, skillName, score, max, topics, skills) {
+            if (!topics[topicName]) topics[topicName] = { scored: 0, max: 0 };
+            topics[topicName].scored += score;
+            topics[topicName].max += max;
+
+            if (!skills[skillName]) skills[skillName] = { scored: 0, max: 0 };
+            skills[skillName].scored += score;
+            skills[skillName].max += max;
+        }
+
+        function initializeVisualAnalytics() {
+            const ctxTopic = document.getElementById("topicChart").getContext("2d");
+            topicChartInstance = new Chart(ctxTopic, {
+                type: 'bar',
+                data: { labels: [], datasets: [{ label: 'Mastery Index %', data: [], backgroundColor: '#1e40af', borderRadius: 3 }] },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: { x: { min: 0, max: 100, ticks: { font: { size: 10 } } }, y: { ticks: { font: { size: 9 }, autoSkip: false } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            const ctxSkill = document.getElementById("skillChart").getContext("2d");
+            skillChartInstance = new Chart(ctxSkill, {
+                type: 'radar',
+                data: { labels: [], datasets: [{ label: 'Cognitive Execution Vector %', data: [], backgroundColor: 'rgba(79, 70, 229, 0.08)', borderColor: '#4f46e5', pointBackgroundColor: '#4f46e5' }] },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { r: { min: 0, max: 100, ticks: { display: false }, pointLabels: { font: { size: 10 } } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            runDynamicRecalculation();
+        }
+
+        function updateGraphDisplays(topicData, skillData) {
+            const sortedLabels = Object.keys(topicData).sort();
+            const calculatedTopicPercentages = sortedLabels.map(lbl => Math.round((topicData[lbl].scored / topicData[lbl].max) * 100) || 0);
+
+            topicChartInstance.data.labels = sortedLabels;
+            topicChartInstance.data.datasets[0].data = calculatedTopicPercentages;
+            topicChartInstance.update();
+
+            const distinctSkills = Object.keys(skillData);
+            const calculatedSkillPercentages = distinctSkills.map(sk => Math.round((skillData[sk].scored / skillData[sk].max) * 100) || 0);
+
+            skillChartInstance.data.labels = distinctSkills;
+            skillChartInstance.data.datasets[0].data = calculatedSkillPercentages;
+            skillChartInstance.update();
+        }
+    </script>
+</body>
+</html>
