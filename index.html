@@ -7,10 +7,25 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .input-error { border-color: #ef4444; background-color: #fef2f2; }
+        .input-error { border-color: #ef4444; background-color: #fef2f2; color: #b91c1c; }
     </style>
 </head>
-<body class="bg-gray-50 font-sans text-gray-900 min-h-screen">
+<body class="bg-gray-50 font-sans text-gray-900 min-h-screen relative">
+
+    <div id="successModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-all">
+        <div class="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6 text-center border border-gray-100 transform scale-100 transition-transform">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 mb-4 animate-bounce">
+                <svg class="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-1">Submission Successful</h3>
+            <p class="text-xs text-gray-500 mb-5 leading-relaxed">The diagnostic marks have been securely compiled and synchronized into the department database sheet.</p>
+            <button id="closeModalBtn" class="w-full bg-slate-900 text-white rounded-lg py-2.5 text-xs font-bold hover:bg-slate-800 transition shadow">
+                Return to Assessment Tracker
+            </button>
+        </div>
+    </div>
 
     <header class="bg-gradient-to-r from-slate-900 to-blue-900 text-white shadow-md">
         <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
@@ -106,7 +121,7 @@
                         <h2 class="font-bold tracking-wide">Teacher 1 Section: Mechanics & Electricity</h2>
                         <span class="text-xs bg-blue-800 px-2 py-1 rounded border border-blue-700 font-mono">Max 80</span>
                     </div>
-                    <div class="overflow-x-auto max-h-[400px] overflow-y-auto">
+                    <div class="overflow-x-auto max-h-[420px] overflow-y-auto">
                         <table class="w-full text-left border-collapse">
                             <thead class="bg-gray-100 text-[11px] font-bold text-gray-600 uppercase tracking-wider sticky top-0 z-10 bg-gray-100 shadow-sm">
                                 <tr>
@@ -127,7 +142,7 @@
                         <h2 class="font-bold tracking-wide">Teacher 2 Section: Waves, Quantum & Space</h2>
                         <span class="text-xs bg-indigo-800 px-2 py-1 rounded border border-indigo-700 font-mono">Max 80</span>
                     </div>
-                    <div class="overflow-x-auto max-h-[400px] overflow-y-auto">
+                    <div class="overflow-x-auto max-h-[420px] overflow-y-auto">
                         <table class="w-full text-left border-collapse">
                             <thead class="bg-gray-100 text-[11px] font-bold text-gray-600 uppercase tracking-wider sticky top-0 z-10 bg-gray-100 shadow-sm">
                                 <tr>
@@ -144,26 +159,23 @@
                 </div>
             </div>
 
-            <div class="lg:col-span-5 space-y-6 sticky top-6">
+            <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-6 self-start">
+                
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-                    <h3 class="font-bold text-gray-800 text-sm border-b pb-2 mb-3 tracking-tight uppercase text-gray-500">Live Granular Sub-Topic Mastery (%)</h3>
-                    <div class="relative h-[420px]">
+                    <h3 class="font-bold text-gray-800 text-sm border-b pb-2 mb-3 tracking-tight uppercase text-gray-400">Live Granular Sub-Topic Mastery (%)</h3>
+                    <div class="relative h-[400px]">
                         <canvas id="topicChart"></canvas>
                     </div>
                 </div>
 
-                <div class="lg:col-span-5 space-y-6 sticky top-6">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-                    <h3 class="font-bold text-gray-800 text-sm border-b pb-2 mb-3 tracking-tight uppercase text-gray-500">Live Granular Sub-Topic Mastery (%)</h3>
-                    <div class="relative h-[420px]">
-                        <canvas id="topicChart"></canvas>
-                    </div>
-                </div> <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-                    <h3 class="font-bold text-gray-800 text-sm border-b pb-2 mb-3 tracking-tight uppercase text-gray-500">Cognitive Skill Execution (%)</h3>
+                    <h3 class="font-bold text-gray-800 text-sm border-b pb-2 mb-3 tracking-tight uppercase text-gray-400">Cognitive Skill Execution (%)</h3>
                     <div class="relative h-64">
                         <canvas id="skillChart"></canvas>
                     </div>
-                </div> <div class="flex flex-col sm:flex-row gap-3">
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-3">
                     <button id="resetMasteryBtn" class="w-1/3 text-xs font-semibold text-red-600 border border-red-200 bg-red-50 hover:bg-red-100 rounded-lg py-2.5 transition text-center">
                         Clear Fields
                     </button>
@@ -172,17 +184,19 @@
                     </button>
                 </div>
                 <p id="syncStatusMsg" class="text-center text-xs text-gray-500 font-medium pt-1"></p>
-            </div> </div> </main>
+            </div>
+        </div>
+    </main>
+
     <footer class="bg-gray-800 text-gray-400 py-6 mt-12 text-center text-xs border-t border-gray-700">
-        <p>© 2026 Physics Department Assessment Systems. Connected to Department Data Repositories.</p>
+        <p>© Physics Department Assessment Systems. Connected to Cloud Repositories.</p>
     </footer>
 
     <script>
-        // CONFIGURATION: Paste your deployment URL from Google Apps Script inside the quotes below
-        https://script.google.com/macros/s/AKfycbzCW0cpXI-zMafC8FLK-u1aM9ajm0so70VtRQtghWuHHsCvt7NPzNaQHpkzHvAAo5ewUA/exec
+        // CONFIGURATION LINKAGE: Replace with your actual deployed web app string URL from Google Apps Script
         const GOOGLE_SCRIPT_URL = "YOUR_APPS_SCRIPT_URL_HERE";
 
-        // Granular curriculum question datasets
+        // Curriculum component question arrays
         const dynamicDataset = {
             t1: [
                 { id: "1", max: 1, topic: "Circuits: Charge, Current & Power", type: "Multi choice" },
@@ -268,6 +282,9 @@
         const resetMasteryBtn = document.getElementById("resetMasteryBtn");
         const cloudSubmitBtn = document.getElementById("cloudSubmitBtn");
         const syncStatusMsg = document.getElementById("syncStatusMsg");
+        
+        const successModal = document.getElementById("successModal");
+        const closeModalBtn = document.getElementById("closeModalBtn");
 
         window.addEventListener("DOMContentLoaded", () => {
             renderTableGrid(dynamicDataset.t1, teacher1Grid, "t1");
@@ -281,6 +298,7 @@
             });
 
             cloudSubmitBtn.addEventListener("click", pushDataToCloud);
+            closeModalBtn.addEventListener("click", toggleModalFrameHide);
         });
 
         function renderTableGrid(dataset, targetTbody, prefix) {
@@ -310,78 +328,89 @@
         }
 
         function validateAndTrigger(e) {
-            const input = e.target;
-            const val = parseFloat(input.value);
-            const prefix = input.getAttribute("data-dataset");
-            const qid = input.getAttribute("data-qid");
-            const meta = dynamicDataset[prefix].find(x => x.id === qid);
+            try {
+                const input = e.target;
+                let val = parseFloat(input.value);
+                const prefix = input.getAttribute("data-dataset");
+                const qid = input.getAttribute("data-qid");
+                if (!prefix || !qid) return;
+                
+                const meta = dynamicDataset[prefix].find(x => x.id === qid);
+                if (!meta) return;
 
-            if (val > meta.max || val < 0) {
-                input.classList.add("input-error");
-            } else {
-                input.classList.remove("input-error");
+                if (!isNaN(val) && (val > meta.max || val < 0)) {
+                    input.classList.add("input-error");
+                } else {
+                    input.classList.remove("input-error");
+                }
+                runDynamicRecalculation();
+            } catch (err) {
+                console.error("Validation handling fault:", err);
             }
-            runDynamicRecalculation();
         }
 
         function runDynamicRecalculation() {
-            let t1Total = 0;
-            let t2Total = 0;
+            try {
+                let t1Total = 0;
+                let t2Total = 0;
 
-            const structuredTopicMap = {};
-            const structuredSkillMap = {};
+                const structuredTopicMap = {};
+                const structuredSkillMap = {};
 
-            dynamicDataset.t1.forEach(q => {
-                const inputElement = document.querySelector(`.score-input[data-dataset="t1"][data-qid="${q.id}"]`);
-                let parsedVal = parseFloat(inputElement ? inputElement.value : 0);
-                if (isNaN(parsedVal) || parsedVal < 0) parsedVal = 0;
-                if (parsedVal > q.max) parsedVal = q.max;
+                // Establish immutable chart metric arrays 
+                for (const section of ['t1', 't2']) {
+                    dynamicDataset[section].forEach(q => {
+                        if (!structuredTopicMap[q.topic]) structuredTopicMap[q.topic] = { scored: 0, max: 0 };
+                        structuredTopicMap[q.topic].max += q.max;
 
-                t1Total += parsedVal;
-                collateMetrics(q.topic, q.type, parsedVal, q.max, structuredTopicMap, structuredSkillMap);
-            });
+                        if (!structuredSkillMap[q.type]) structuredSkillMap[q.type] = { scored: 0, max: 0 };
+                        structuredSkillMap[q.type].max += q.max;
+                    });
+                }
 
-            dynamicDataset.t2.forEach(q => {
-                const inputElement = document.querySelector(`.score-input[data-dataset="t2"][data-qid="${q.id}"]`);
-                let parsedVal = parseFloat(inputElement ? inputElement.value : 0);
-                if (isNaN(parsedVal) || parsedVal < 0) parsedVal = 0;
-                if (parsedVal > q.max) parsedVal = q.max;
+                // Collate marks across generated inputs
+                document.querySelectorAll(".score-input").forEach(input => {
+                    const prefix = input.getAttribute("data-dataset");
+                    const qid = input.getAttribute("data-qid");
+                    if (!prefix || !qid || !dynamicDataset[prefix]) return;
+                    
+                    const q = dynamicDataset[prefix].find(x => x.id === qid);
+                    if (!q) return;
 
-                t2Total += parsedVal;
-                collateMetrics(q.topic, q.type, parsedVal, q.max, structuredTopicMap, structuredSkillMap);
-            });
+                    let parsedVal = parseFloat(input.value);
+                    if (isNaN(parsedVal) || parsedVal < 0) parsedVal = 0;
+                    if (parsedVal > q.max) parsedVal = q.max;
 
-            t1ScoreDisplay.textContent = Math.round(t1Total * 10) / 10;
-            t2ScoreDisplay.textContent = Math.round(t2Total * 10) / 10;
-            
-            t1ProgressBar.style.width = `${(t1Total / 80) * 100}%`;
-            t2ProgressBar.style.width = `${(t2Total / 80) * 100}%`;
+                    if (prefix === "t1") t1Total += parsedVal;
+                    if (prefix === "t2") t2Total += parsedVal;
 
-            const totalAggregated = t1Total + t2Total;
-            const relativePercent = Math.round((totalAggregated / 160) * 100);
-            
-            combinedScoreDisplay.textContent = Math.round(totalAggregated * 10) / 10;
-            combinedPercentageDisplay.textContent = `${relativePercent}%`;
+                    if (structuredTopicMap[q.topic]) structuredTopicMap[q.topic].scored += parsedVal;
+                    if (structuredSkillMap[q.type]) structuredSkillMap[q.type].scored += parsedVal;
+                });
 
-            // Cache current summary for API payload mapping
-            compiledStateCache.t1Score = Math.round(t1Total * 10) / 10;
-            compiledStateCache.t2Score = Math.round(t2Total * 10) / 10;
-            compiledStateCache.combinedScore = Math.round(totalAggregated * 10) / 10;
-            compiledStateCache.combinedPercentage = relativePercent;
-            compiledStateCache.topics = structuredTopicMap;
-            compiledStateCache.skills = structuredSkillMap;
+                t1ScoreDisplay.textContent = Math.round(t1Total * 10) / 10;
+                t2ScoreDisplay.textContent = Math.round(t2Total * 10) / 10;
+                
+                t1ProgressBar.style.width = `${(t1Total / 80) * 100}%`;
+                t2ProgressBar.style.width = `${(t2Total / 80) * 100}%`;
 
-            updateGraphDisplays(structuredTopicMap, structuredSkillMap);
-        }
+                const totalAggregated = t1Total + t2Total;
+                const relativePercent = Math.round((totalAggregated / 160) * 100) || 0;
+                
+                combinedScoreDisplay.textContent = Math.round(totalAggregated * 10) / 10;
+                combinedPercentageDisplay.textContent = `${relativePercent}%`;
 
-        function collateMetrics(topicName, skillName, score, max, topics, skills) {
-            if (!topics[topicName]) topics[topicName] = { scored: 0, max: 0 };
-            topics[topicName].scored += score;
-            topics[topicName].max += max;
+                compiledStateCache.t1Score = Math.round(t1Total * 10) / 10;
+                compiledStateCache.t2Score = Math.round(t2Total * 10) / 10;
+                compiledStateCache.combinedScore = Math.round(totalAggregated * 10) / 10;
+                compiledStateCache.combinedPercentage = relativePercent;
+                compiledStateCache.topics = structuredTopicMap;
+                compiledStateCache.skills = structuredSkillMap;
 
-            if (!skills[skillName]) skills[skillName] = { scored: 0, max: 0 };
-            skills[skillName].scored += score;
-            skills[skillName].max += max;
+                updateGraphDisplays(structuredTopicMap, structuredSkillMap);
+            } catch (err) {
+                console.error("Recalculation engine failure:", err);
+            }
         }
 
         function initializeVisualAnalytics() {
@@ -421,12 +450,22 @@
             topicChartInstance.data.datasets[0].data = calculatedTopicPercentages;
             topicChartInstance.update();
 
-            const distinctSkills = Object.keys(skillData);
+            const distinctSkills = Object.keys(skillData).sort();
             const calculatedSkillPercentages = distinctSkills.map(sk => Math.round((skillData[sk].scored / skillData[sk].max) * 100) || 0);
 
             skillChartInstance.data.labels = distinctSkills;
             skillChartInstance.data.datasets[0].data = calculatedSkillPercentages;
             skillChartInstance.update();
+        }
+
+        function toggleModalFrameShow() {
+            successModal.classList.remove("hidden");
+            successModal.classList.add("flex");
+        }
+
+        function toggleModalFrameHide() {
+            successModal.classList.remove("flex");
+            successModal.classList.add("hidden");
         }
 
         async function pushDataToCloud() {
@@ -435,17 +474,18 @@
             const t2 = document.getElementById("teacher2Select").value;
 
             if (!name || !t1 || !t2) {
-                alert("Identity Incomplete: Please fill in the Student Name, Teacher 1, and Teacher 2 fields before submitting.");
+                alert("Identity Incomplete: Please enter the Student Name, Teacher 1, and Teacher 2 fields before submitting.");
                 return;
             }
 
             if (GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
-                alert("Setup Required: Paste your Google Apps Script Web App URL into line 126 of this HTML file.");
+                alert("System URL Setup Error: Paste your Google Apps Script Web App execution URL directly into line 144 of this file.");
                 return;
             }
 
+            // Lock controls immediately to enforce double-submission protection
             cloudSubmitBtn.disabled = true;
-            cloudSubmitBtn.classList.add("opacity-50", "cursor-not-allowed");
+            cloudSubmitBtn.classList.add("opacity-40", "cursor-not-allowed");
             syncStatusMsg.textContent = "Connecting to spreadsheet cloud api...";
             syncStatusMsg.className = "text-center text-xs text-amber-600 font-medium pt-1";
 
@@ -469,16 +509,27 @@
                     body: JSON.stringify(submissionPayload)
                 });
 
-                syncStatusMsg.textContent = "Success! Data sent to the central department spreadsheet.";
+                syncStatusMsg.textContent = "Success! Data synchronized securely.";
                 syncStatusMsg.className = "text-center text-xs text-green-600 font-bold pt-1";
-                alert("Data compiled! Your marks have been synchronized with the department sheet.");
+                
+                // Trigger the confirmation pop-up modal overlay
+                toggleModalFrameShow();
+
             } catch (err) {
                 console.error(err);
-                syncStatusMsg.textContent = "Error: Connection timed out or failed.";
+                syncStatusMsg.textContent = "Error: Transmission route timed out.";
                 syncStatusMsg.className = "text-center text-xs text-red-600 font-bold pt-1";
-            } finally {
+                alert("Connection problem: Unable to reach the target spreadsheet.");
+                
+                // Release the interaction block only if communication completely breaks down
                 cloudSubmitBtn.disabled = false;
-                cloudSubmitBtn.classList.remove("opacity-50", "cursor-not-allowed");
+                cloudSubmitBtn.classList.remove("opacity-40", "cursor-not-allowed");
+            } finally {
+                // Keep the interface locked post-success to protect system integrity
+                if (syncStatusMsg.classList.contains("text-red-600")) {
+                    cloudSubmitBtn.disabled = false;
+                    cloudSubmitBtn.classList.remove("opacity-40", "cursor-not-allowed");
+                }
             }
         }
     </script>
