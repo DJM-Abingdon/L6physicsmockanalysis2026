@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .input-error { border-color: #ef4444; background-color: #fef2f2; color: #b91c1c; }
-        /* Fix scrolling layouts inside hidden configurations */
+        /* Clean scrolling tracks for embedded matrix layouts */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
@@ -24,7 +24,7 @@
                 </svg>
             </div>
             <h3 class="text-lg font-bold text-slate-900 mb-1">Submission Successful</h3>
-            <p class="text-xs text-gray-500 mb-5 leading-relaxed">The diagnostic marks have been securely compiled and synchronized into the department database sheet.</p>
+            <p id="modalDescription" class="text-xs text-gray-500 mb-5 leading-relaxed">The diagnostic marks have been securely compiled and synchronized into the department database sheet.</p>
             <button id="closeModalBtn" class="w-full bg-slate-900 text-white rounded-lg py-2.5 text-xs font-bold hover:bg-slate-800 transition shadow">
                 Return to Assessment Tracker
             </button>
@@ -200,7 +200,7 @@
         https://script.google.com/macros/s/AKfycbzCW0cpXI-zMafC8FLK-u1aM9ajm0so70VtRQtghWuHHsCvt7NPzNaQHpkzHvAAo5ewUA/exec
         const GOOGLE_SCRIPT_URL = "YOUR_APPS_SCRIPT_URL_HERE";
 
-        // Curriculum component question arrays
+        // Full dataset definitions mapping out the physical diagnostic specifications
         const dynamicDataset = {
             t1: [
                 { id: "1", max: 1, topic: "Circuits: Charge, Current & Power", type: "Multi choice" },
@@ -268,43 +268,40 @@
             ]
         };
 
+        // Configuration structures
         let topicChartInstance = null;
         let skillChartInstance = null;
         let compiledStateCache = { t1Score: 0, t2Score: 0, combinedScore: 0, combinedPercentage: 0, topics: {}, skills: {} };
 
-        const teacher1Grid = document.getElementById("teacher1Grid");
-        const teacher2Grid = document.getElementById("teacher2Grid");
-        
-        const t1ScoreDisplay = document.getElementById("t1ScoreDisplay");
-        const t2ScoreDisplay = document.getElementById("t2ScoreDisplay");
-        const combinedScoreDisplay = document.getElementById("combinedScoreDisplay");
-        const combinedPercentageDisplay = document.getElementById("combinedPercentageDisplay");
-        
-        const t1ProgressBar = document.getElementById("t1ProgressBar");
-        const t2ProgressBar = document.getElementById("t2ProgressBar");
-        
-        const resetMasteryBtn = document.getElementById("resetMasteryBtn");
-        const cloudSubmitBtn = document.getElementById("cloudSubmitBtn");
-        const syncStatusMsg = document.getElementById("syncStatusMsg");
-        
-        const successModal = document.getElementById("successModal");
-        const closeModalBtn = document.getElementById("closeModalBtn");
-
-        // Initialization sequence fires reliably on page availability
+        // Post-Load Event Binding Enclosure isolates lookups from early page engine threads
         window.addEventListener("DOMContentLoaded", () => {
-            // Build visual matrices
-            renderTableGrid(dynamicDataset.t1, teacher1Grid, "t1");
-            renderTableGrid(dynamicDataset.t2, teacher2Grid, "t2");
-            
-            // Build charts safely after table generation completes
-            setTimeout(() => {
-                initializeVisualAnalytics();
-            }, 50);
+            const teacher1Grid = document.getElementById("teacher1Grid");
+            const teacher2Grid = document.getElementById("teacher2Grid");
+            const resetMasteryBtn = document.getElementById("resetMasteryBtn");
+            const cloudSubmitBtn = document.getElementById("cloudSubmitBtn");
+            const closeModalBtn = document.getElementById("closeModalBtn");
 
+            // Build out input table structures safely
+            try {
+                renderTableGrid(dynamicDataset.t1, teacher1Grid, "t1");
+                renderTableGrid(dynamicDataset.t2, teacher2Grid, "t2");
+            } catch (err) {
+                console.error("Table matrix structural assembly blocked:", err);
+            }
+            
+            // Build out chart engine analytics framing elements
+            try {
+                initializeVisualAnalytics();
+            } catch (err) {
+                console.error("Visual metrics framing pipeline delayed:", err);
+            }
+
+            // Wire up user interaction triggers
             resetMasteryBtn.addEventListener("click", () => {
                 document.querySelectorAll(".score-input").forEach(el => el.value = "");
                 runDynamicRecalculation();
-                syncStatusMsg.textContent = "";
+                const syncStatusMsg = document.getElementById("syncStatusMsg");
+                if(syncStatusMsg) syncStatusMsg.textContent = "";
             });
 
             cloudSubmitBtn.addEventListener("click", pushDataToCloud);
@@ -312,7 +309,9 @@
         });
 
         function renderTableGrid(dataset, targetTbody, prefix) {
+            if (!targetTbody) return;
             targetTbody.innerHTML = "";
+            
             dataset.forEach(q => {
                 const row = document.createElement("tr");
                 row.className = "hover:bg-slate-50 transition-colors text-xs";
@@ -391,17 +390,17 @@
                 if (structuredSkillMap[q.type]) structuredSkillMap[q.type].scored += parsedVal;
             });
 
-            t1ScoreDisplay.textContent = Math.round(t1Total * 10) / 10;
-            t2ScoreDisplay.textContent = Math.round(t2Total * 10) / 10;
+            document.getElementById("t1ScoreDisplay").textContent = Math.round(t1Total * 10) / 10;
+            document.getElementById("t2ScoreDisplay").textContent = Math.round(t2Total * 10) / 10;
             
-            t1ProgressBar.style.width = `${(t1Total / 80) * 100}%`;
-            t2ProgressBar.style.width = `${(t2Total / 80) * 100}%`;
+            document.getElementById("t1ProgressBar").style.width = `${(t1Total / 80) * 100}%`;
+            document.getElementById("t2ProgressBar").style.width = `${(t2Total / 80) * 100}%`;
 
             const totalAggregated = t1Total + t2Total;
             const relativePercent = Math.round((totalAggregated / 160) * 100) || 0;
             
-            combinedScoreDisplay.textContent = Math.round(totalAggregated * 10) / 10;
-            combinedPercentageDisplay.textContent = `${relativePercent}%`;
+            document.getElementById("combinedScoreDisplay").textContent = Math.round(totalAggregated * 10) / 10;
+            document.getElementById("combinedPercentageDisplay").textContent = `${relativePercent}%`;
 
             compiledStateCache.t1Score = Math.round(t1Total * 10) / 10;
             compiledStateCache.t2Score = Math.round(t2Total * 10) / 10;
@@ -416,39 +415,41 @@
         }
 
         function initializeVisualAnalytics() {
-            try {
-                const ctxTopic = document.getElementById("topicChart").getContext("2d");
-                topicChartInstance = new Chart(ctxTopic, {
-                    type: 'bar',
-                    data: { labels: [], datasets: [{ label: 'Mastery Index %', data: [], backgroundColor: '#1e40af', borderRadius: 3 }] },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        indexAxis: 'y',
-                        scales: { x: { min: 0, max: 100, ticks: { font: { size: 10 } } }, y: { ticks: { font: { size: 9 }, autoSkip: false } } },
-                        plugins: { legend: { display: false } }
-                    }
-                });
+            const topicCanvas = document.getElementById("topicChart");
+            const skillCanvas = document.getElementById("skillChart");
+            if (!topicCanvas || !skillCanvas || typeof Chart === 'undefined') return;
 
-                const ctxSkill = document.getElementById("skillChart").getContext("2d");
-                skillChartInstance = new Chart(ctxSkill, {
-                    type: 'radar',
-                    data: { labels: [], datasets: [{ label: 'Cognitive Execution Vector %', data: [], backgroundColor: 'rgba(79, 70, 229, 0.08)', borderColor: '#4f46e5', pointBackgroundColor: '#4f46e5' }] },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: { r: { min: 0, max: 100, ticks: { display: false }, pointLabels: { font: { size: 10 } } } },
-                        plugins: { legend: { display: false } }
-                    }
-                });
+            const ctxTopic = topicCanvas.getContext("2d");
+            topicChartInstance = new Chart(ctxTopic, {
+                type: 'bar',
+                data: { labels: [], datasets: [{ label: 'Mastery Index %', data: [], backgroundColor: '#1e40af', borderRadius: 3 }] },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: { x: { min: 0, max: 100, ticks: { font: { size: 10 } } }, y: { ticks: { font: { size: 9 }, autoSkip: false } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
 
-                runDynamicRecalculation();
-            } catch(e) {
-                console.warn("Chart system delayed engine setup:", e);
-            }
+            const ctxSkill = skillCanvas.getContext("2d");
+            skillChartInstance = new Chart(ctxSkill, {
+                type: 'radar',
+                data: { labels: [], datasets: [{ label: 'Cognitive Execution Vector %', data: [], backgroundColor: 'rgba(79, 70, 229, 0.08)', borderColor: '#4f46e5', pointBackgroundColor: '#4f46e5' }] },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { r: { min: 0, max: 100, ticks: { display: false }, pointLabels: { font: { size: 10 } } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            runDynamicRecalculation();
         }
 
         function updateGraphDisplays(topicData, skillData) {
+            if(!topicChartInstance || !skillChartInstance) return;
+
             const sortedLabels = Object.keys(topicData).sort();
             const calculatedTopicPercentages = sortedLabels.map(lbl => Math.round((topicData[lbl].scored / topicData[lbl].max) * 100) || 0);
 
@@ -465,31 +466,39 @@
         }
 
         function toggleModalFrameShow() {
-            successModal.classList.remove("hidden");
-            successModal.classList.add("flex");
+            const modal = document.getElementById("successModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
         }
 
         function toggleModalFrameHide() {
-            successModal.classList.remove("flex");
-            successModal.classList.add("hidden");
+            const modal = document.getElementById("successModal");
+            modal.classList.remove("flex");
+            modal.classList.add("hidden");
         }
 
         async function pushDataToCloud() {
             const name = document.getElementById("studentName").value.trim();
             const t1 = document.getElementById("teacher1Select").value;
             const t2 = document.getElementById("teacher2Select").value;
+            const cloudSubmitBtn = document.getElementById("cloudSubmitBtn");
+            const syncStatusMsg = document.getElementById("syncStatusMsg");
+            const modalDesc = document.getElementById("modalDescription");
 
             if (!name || !t1 || !t2) {
                 alert("Identity Incomplete: Please enter the Student Name, Teacher 1, and Teacher 2 fields before submitting.");
                 return;
             }
 
+            // DEMO SIMULATION BACKSTOP: If the placeholder URL isn't updated yet, show the pop-up modal anyway for preview testing
             if (GOOGLE_SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
-                alert("System URL Setup Error: Paste your Google Apps Script Web App execution URL directly into line 144 of this file.");
+                console.log("Mock data payload compiled:", { studentName: name, t1Score: compiledStateCache.combinedScore });
+                modalDesc.innerHTML = `<span class="text-amber-600 font-bold block mb-1">⚠️ running in test/sandbox mode</span>The tracker successfully captured ${name}'s metrics (${compiledStateCache.combinedScore}/160). The submission modal is fully working! Connect your Google Sheet Script URL to enable production storage sync.`;
+                toggleModalFrameShow();
                 return;
             }
 
-            // Double-submission lock kicks in immediately
+            // Lock primary tracking fields instantly to protect transmission routes
             cloudSubmitBtn.disabled = true;
             cloudSubmitBtn.classList.add("opacity-40", "cursor-not-allowed");
             syncStatusMsg.textContent = "Connecting to spreadsheet cloud API...";
@@ -518,16 +527,17 @@
                 syncStatusMsg.textContent = "Success! Data synchronized securely.";
                 syncStatusMsg.className = "text-center text-xs text-green-600 font-bold pt-1";
                 
-                // Show the modal confirmation pop-up window
+                // Fire live deployment confirmation layout view
+                modalDesc.textContent = "The diagnostic marks have been securely compiled and synchronized into the department database sheet.";
                 toggleModalFrameShow();
 
             } catch (err) {
                 console.error(err);
                 syncStatusMsg.textContent = "Error: Transmission route timed out.";
                 syncStatusMsg.className = "text-center text-xs text-red-600 font-bold pt-1";
-                alert("Connection problem: Unable to reach the target spreadsheet.");
+                alert("Connection problem: Unable to reach the target spreadsheet. Button unlocked for retry.");
                 
-                // Re-enable on error so the user can retry
+                // Unlock only if communication layers fail completely
                 cloudSubmitBtn.disabled = false;
                 cloudSubmitBtn.classList.remove("opacity-40", "cursor-not-allowed");
             }
