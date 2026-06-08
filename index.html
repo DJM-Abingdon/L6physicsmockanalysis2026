@@ -613,6 +613,7 @@
                 syncStatusMsg.textContent = "Connecting to spreadsheet cloud API...";
                 syncStatusMsg.className = "text-center text-xs text-amber-600 font-medium pt-1";
             }
+            
 
             var submissionPayload = {
                 studentName: name,
@@ -621,10 +622,33 @@
                 t1Score: compiledStateCache.t1Score,
                 t2Score: compiledStateCache.t2Score,
                 combinedScore: compiledStateCache.combinedScore,
-                combinedPercentage: compiledStateCache.combinedPercentage,
-                topicData: compiledStateCache.topics,
-                skillData: compiledStateCache.skills
+                combinedPercentage: compiledStateCache.combinedPercentage + "%"
             };
+
+            // Flatten out the live topic percentage scores directly into the main object
+            if (compiledStateCache.topics) {
+                for (var topicKey in compiledStateCache.topics) {
+                    if (compiledStateCache.topics.hasOwnProperty(topicKey)) {
+                    var item = compiledStateCache.topics[topicKey];
+                    var percentageScore = item.max > 0 ? Math.round((item.scored / item.max) * 100) : 0;
+                    // This maps the exact topic string as the object key (e.g., submissionPayload["Space: Intensity & Parallax"])
+                    submissionPayload[topicKey] = percentageScore + "%";
+                    }
+                }
+            }
+
+            // Flatten out the skill percentages into the main object as well
+            if (compiledStateCache.skills) {
+                for (var skillKey in compiledStateCache.skills) {
+                    if (compiledStateCache.skills.hasOwnProperty(skillKey)) {
+                    var sItem = compiledStateCache.skills[skillKey];
+                    var sPercentageScore = sItem.max > 0 ? Math.round((sItem.scored / sItem.max) * 100) : 0;
+                    submissionPayload[skillKey] = sPercentageScore + "%";
+                    }
+                }
+            }
+
+// --- CONTINUE WITH XHR POST REQUEST LOGIC BELOW ---
 
             var xhr = new XMLHttpRequest();
             xhr.open("POST", GOOGLE_SCRIPT_URL, true);
