@@ -11,6 +11,43 @@
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        /* --- PRINT STYLES FOR CRISP VECTOR PDF OUTPUT --- */
+        @media print {
+            .no-print, #downloadPdfBtn, #resetMasteryBtn, #cloudSubmitBtn, .flex-row-buttons, footer {
+                display: none !important;
+            }
+            body {
+                background-color: white !important;
+                color: #0f172a !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .bg-white, .bg-gray-50, .bg-gray-100 {
+                background-color: white !important;
+            }
+            header, .bg-gradient-to-r {
+                background: #0f172a !important;
+                color: white !important;
+            }
+            .border, .border-gray-200 {
+                border-color: #e2e8f0 !important;
+            }
+            input, select {
+                border: none !important;
+                background: transparent !important;
+                appearance: none !important;
+                -webkit-appearance: none !important;
+                padding-left: 0 !important;
+            }
+            canvas, #topicChartContainer, #skillChartContainer, table {
+                page-break-inside: avoid !important;
+            }
+            @page {
+                size: A4 portrait;
+                margin: 12mm 10mm;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans text-gray-900 min-h-screen relative">
@@ -40,8 +77,14 @@
                 <h1 class="text-3xl font-bold tracking-tight">L6th Physics 2026 Exam Analysis</h1>
                 <p class="text-blue-200 mt-1">L6th Physics Summer Exam Analysis</p>
             </div>
-            <div class="mt-4 md:mt-0 bg-blue-950 bg-opacity-60 px-4 py-2 rounded-lg border border-blue-800 text-sm">
-                Total Exam Marks: <span class="font-bold text-emerald-400">160</span> (80 Marks Per Teacher)
+            <div class="mt-4 md:mt-0 flex items-center gap-4">
+                <div class="bg-blue-950 bg-opacity-60 px-4 py-2 rounded-lg border border-blue-800 text-sm">
+                    Total Exam Marks: <span class="font-bold text-emerald-400">160</span> (80 Marks Per Teacher)
+                </div>
+                <button id="downloadPdfBtn" onclick="generateStudentPdf()" class="no-print bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2.5 rounded-lg border border-blue-400 shadow-sm transition flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Download PDF Report
+                </button>
             </div>
         </div>
     </header>
@@ -139,7 +182,7 @@
                                 </tr>
                             </thead>
                             <tbody id="teacher1Grid" class="divide-y divide-gray-200 text-sm">
-                                </tbody>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -160,7 +203,7 @@
                                 </tr>
                             </thead>
                             <tbody id="teacher2Grid" class="divide-y divide-gray-200 text-sm">
-                                </tbody>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -184,7 +227,7 @@
                     </div>
                 </div>
                 
-                <div class="flex flex-col sm:flex-row gap-3">
+                <div class="flex flex-col sm:flex-row gap-3 class-buttons no-print">
                     <button id="resetMasteryBtn" class="w-1/3 text-xs font-semibold text-red-600 border border-red-200 bg-red-50 hover:bg-red-100 rounded-lg py-2.5 text-center">
                         Clear Fields
                     </button>
@@ -192,7 +235,7 @@
                         Submit to Department Sheet
                     </button>
                 </div>
-                <p id="syncStatusMsg" class="text-center text-xs text-gray-500 font-medium pt-1"></p>
+                <p id="syncStatusMsg" class="text-center text-xs text-gray-500 font-medium pt-1 no-print"></p>
             </div>
         </div>
     </main>
@@ -213,10 +256,9 @@
             return false;
         };
 
-        https://script.google.com/macros/s/AKfycbxGD2G0Fp6nyyCyOZOj1ZQnEHNWVcxXyJ5dCPn5D1nl-BjQsS4SRMcMaI93WOw3WRTaFQ/exec
         var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGD2G0Fp6nyyCyOZOj1ZQnEHNWVcxXyJ5dCPn5D1nl-BjQsS4SRMcMaI93WOw3WRTaFQ/exec";
 
-        // Structured Physics Specifications Data Object (Legacy ES5 Compatible Structuring)
+        // Structured Physics Specifications Data Object
         var dynamicDataset = {
             t1: [
                 { id: "1", max: 1, topic: "Base units", type: "Multi choice" },
@@ -257,7 +299,7 @@
                 { id: "2", max: 1, topic: "Waves: Refraction", type: "Multi choice" },
                 { id: "3", max: 1, topic: "Waves: Diffraction", type: "Multi choice" },
                 { id: "4", max: 1, topic: "Waves: Standing Waves", type: "Multi choice" },
-                { id: "5", max: 1, topic: "Waves: Intensity and Radiation", "type": "Multi choice" },
+                { id: "5", max: 1, topic: "Waves: Intensity and Radiation", type: "Multi choice" },
                 { id: "6", max: 1, topic: "Space: HR Diagrams & Stellar Evolution", type: "Multi choice" },
                 { id: "7", max: 1, topic: "Space: Wien and Stefan Boltzmann", type: "Multi choice" },
                 { id: "8", max: 1, topic: "Space: Hubble's Constant & The Universe", type: "Multi choice" },
@@ -273,7 +315,7 @@
                 { id: "14ai", max: 1, topic: "Waves: Wave basics", type: "Give/State/Name" },
                 { id: "14bi", max: 4, topic: "Waves: Diffraction", type: "Calculate" },
                 { id: "14bii", max: 3, topic: "Waves: Diffraction", type: "Explain" },
-                { id: "15a", max: 3, topic: "Qunatum: Spectra", type: "Explain" },
+                { id: "15a", max: 3, topic: "Quantum: Spectra", type: "Explain" },
                 { id: "15b", max: 5, topic: "Space: Red shift", type: "Calculate" },
                 { id: "16a", max: 1, topic: "Space: Measuring distances", type: "Give/State/Name" },
                 { id: "16bi", max: 4, topic: "Space: Wien and Stefan Boltzmann", type: "Show that" },
@@ -292,7 +334,7 @@
         var topicChartInstance = null;
         var skillChartInstance = null;
         var useHtmlFallback = false;
-        var compiledStateCache = { t1Score: 0, t2Score: 0, combinedScore: 0, combinedPercentage: 0, topics: {}, skills: {} };
+        var compiledStateCache = { studentName: "Student", t1Score: 0, t2Score: 0, combinedScore: 0, combinedPercentage: 0, topics: {}, skills: {} };
 
         function init() {
             var teacher1Grid = document.getElementById("teacher1Grid");
@@ -333,6 +375,13 @@
 
             if (closeModalBtn) {
                 closeModalBtn.addEventListener("click", toggleModalFrameHide);
+            }
+
+            var nameInput = document.getElementById("studentName");
+            if (nameInput) {
+                nameInput.addEventListener("input", function() {
+                    compiledStateCache.studentName = nameInput.value.trim() || "Student";
+                });
             }
         }
 
@@ -457,6 +506,11 @@
             compiledStateCache.topics = structuredTopicMap;
             compiledStateCache.skills = structuredSkillMap;
 
+            var nameInput = document.getElementById("studentName");
+            if (nameInput) {
+                compiledStateCache.studentName = nameInput.value.trim() || "Student";
+            }
+
             if (useHtmlFallback) {
                 updateHtmlFallbacks(structuredTopicMap, structuredSkillMap);
             } else if (topicChartInstance && skillChartInstance) {
@@ -472,7 +526,6 @@
             var topicContainer = document.getElementById("topicChartContainer");
             var skillContainer = document.getElementById("skillChartContainer");
 
-            // PROXY INTERCEPTOR: If network layers completely block Chart.js CDN, activate built-in HTML Progress Bar charts instantly
             if (typeof Chart === 'undefined') {
                 if (topicFallback) topicFallback.className = "space-y-3 max-h-[380px] overflow-y-auto custom-scrollbar block";
                 if (skillFallback) skillFallback.className = "space-y-3 block";
@@ -619,7 +672,6 @@
                 syncStatusMsg.className = "text-center text-xs text-amber-600 font-medium pt-1";
             }
             
-
             var submissionPayload = {
                 studentName: name,
                 teacher1: t1,
@@ -630,30 +682,25 @@
                 combinedPercentage: compiledStateCache.combinedPercentage + "%"
             };
 
-            // Flatten out the live topic percentage scores directly into the main object
             if (compiledStateCache.topics) {
                 for (var topicKey in compiledStateCache.topics) {
                     if (compiledStateCache.topics.hasOwnProperty(topicKey)) {
-                    var item = compiledStateCache.topics[topicKey];
-                    var percentageScore = item.max > 0 ? Math.round((item.scored / item.max) * 100) : 0;
-                    // This maps the exact topic string as the object key (e.g., submissionPayload["Space: Intensity & Parallax"])
-                    submissionPayload[topicKey] = percentageScore + "%";
+                        var item = compiledStateCache.topics[topicKey];
+                        var percentageScore = item.max > 0 ? Math.round((item.scored / item.max) * 100) : 0;
+                        submissionPayload[topicKey] = percentageScore + "%";
                     }
                 }
             }
 
-            // Flatten out the skill percentages into the main object as well
             if (compiledStateCache.skills) {
                 for (var skillKey in compiledStateCache.skills) {
                     if (compiledStateCache.skills.hasOwnProperty(skillKey)) {
-                    var sItem = compiledStateCache.skills[skillKey];
-                    var sPercentageScore = sItem.max > 0 ? Math.round((sItem.scored / sItem.max) * 100) : 0;
-                    submissionPayload[skillKey] = sPercentageScore + "%";
+                        var sItem = compiledStateCache.skills[skillKey];
+                        var sPercentageScore = sItem.max > 0 ? Math.round((sItem.scored / sItem.max) * 100) : 0;
+                        submissionPayload[skillKey] = sPercentageScore + "%";
                     }
                 }
             }
-
-// --- CONTINUE WITH XHR POST REQUEST LOGIC BELOW ---
 
             var xhr = new XMLHttpRequest();
             xhr.open("POST", GOOGLE_SCRIPT_URL, true);
@@ -687,7 +734,31 @@
             xhr.send(JSON.stringify(submissionPayload));
         }
 
-        // Run engine setup safely regardless of script load order execution
+        // --- EXPORT TO WINDOW PRINT DRIVEN PDF ENGINE ---
+        function generateStudentPdf() {
+            var rawName = compiledStateCache.studentName || "Student";
+            
+            // Clean out domain references or formatting quirks if they pasted an entire email address
+            var cleanName = rawName.split("@")[0].trim();
+            
+            // Filter out system reserved file characters (\, /, :, *, ?, etc.) to keep document paths stable
+            var safeFileName = cleanName.replace(/[^a-zA-Z0-9\s.-]/g, "");
+            
+            // Save current web document tab title
+            var defaultPageTitle = document.title;
+            
+            // Change page title globally: Browsers read this string directly as the default file export name!
+            document.title = safeFileName + " Physics 2026 L6th exam analysis";
+            
+            // Invoke printer panel
+            window.print();
+            
+            // Roll back title changes after process thread yields execution
+            setTimeout(function() {
+                document.title = defaultPageTitle;
+            }, 150);
+        }
+
         if (document.readyState === "complete" || document.readyState === "interactive") {
             init();
         } else {
